@@ -80,7 +80,7 @@ services:
       - spark
 
   postgres:
-    image: postgres:16
+    image: postgres:13
     environment:
       POSTGRES_DB: mastodon_data  # Nom de la base de données
       POSTGRES_USER: user  # Nom de l'utilisateur

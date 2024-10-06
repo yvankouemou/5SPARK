@@ -20,6 +20,12 @@ mastodon = Mastodon(
 # Configuration du producteur Kafka
 producer = Producer({'bootstrap.servers': 'localhost:9092'})
 
+#Fonction pour vérifier si un hashtag contient "AI"
+def contains_ai(hashtag_list):
+    relevant_hashtags = ['ai', 'datascience']
+    # Vérifie si l'un des hashtags dans le toot correspond à 'AI' ou 'DataScience' (insensible à la casse)
+    return any(tag['name'].lower() in relevant_hashtags for tag in hashtag_list)
+
 # Fonction pour récupérer et envoyer les toots dans Kafka
 def fetch_and_send_toots():
     try:
@@ -28,18 +34,25 @@ def fetch_and_send_toots():
             logging.info("Aucun toot trouvé.")
         
         for toot in toots:
-            cleaned_content = BeautifulSoup(toot['content'], "html.parser").get_text()
+            # Filtrer les toots avec des hashtags contenant "AI"
+            if contains_ai(toot['tags']):
 
-            structured_toot = {
-                'user': toot['account']['username'],
-                'timestamp': toot['created_at'].isoformat(),
-                'content': cleaned_content,
-                'hashtags': [tag['name'] for tag in toot['tags']],
-                'favourites_count': toot['favourites_count'],
-                'reblogs_count': toot['reblogs_count']
-            }
-            producer.produce('message_kafka', json.dumps(structured_toot).encode('utf-8'))
-            logging.info(f"Toot publié : {structured_toot['content']}")
+                cleaned_content = BeautifulSoup(toot['content'], "html.parser").get_text()
+
+                structured_toot = {
+                    'id': toot['id'],
+                    'user': toot['account']['username'],
+                    'user_id': toot['account']['id'],
+                    'followers_count': toot['account']['followers_count'],
+                    'timestamp': toot['created_at'].isoformat(),
+                    'content': cleaned_content,
+                    'language': toot['language'],
+                    'hashtags': [tag['name'] for tag in toot['tags']],
+                    'favourites_count': toot['favourites_count'],
+                    'reblogs_count': toot['reblogs_count']
+                }
+                producer.produce('message_kafka', json.dumps(structured_toot).encode('utf-8'))
+                logging.info(f"Toot publié : {structured_toot['content']}")
         
         producer.flush()  # Assure que les messages sont envoyés
 
