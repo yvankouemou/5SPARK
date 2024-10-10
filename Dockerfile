@@ -1,10 +1,10 @@
-# Utiliser une image de base Spark
+# Définition de l'image Spark
 FROM bitnami/spark:latest
 
 # Définir le répertoire de travail dans le conteneur
 WORKDIR /app
 
-# Copier le script Python dans le conteneur
+# Copier le script Python mastodon_kafka_stream.py dans le conteneur
 COPY mastodon_kafka_stream.py .
 
 # Installer les dépendances nécessaires

@@ -20,7 +20,7 @@ mastodon = Mastodon(
 # Configuration du producteur Kafka
 producer = Producer({'bootstrap.servers': 'localhost:9092'})
 
-#Fonction pour vérifier si un hashtag contient "AI"
+#Fonction pour vérifier si un hashtag contient "AI" et "datascience"
 def contains_ai(hashtag_list):
     relevant_hashtags = ['ai', 'datascience']
     # Vérifie si l'un des hashtags dans le toot correspond à 'AI' ou 'DataScience' (insensible à la casse)
@@ -64,4 +64,4 @@ def fetch_and_send_toots():
 if __name__ == "__main__":
     while True:
         fetch_and_send_toots()
-        time.sleep(2)  # Délai entre chaque appel à l'API
+        time.sleep(2)  # Délai entre chaque appel à l'API (2 secondes)

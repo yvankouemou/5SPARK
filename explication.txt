@@ -1,0 +1,26 @@
+- Création d'un compte sur https://mastodon.social (login:Mafogaing; mdp: Azerty12345.)
+
+- Création d'une application
+
+Client ID: zpKnUj8gbpTjVf8b72lIRTkuQ5xix8B445-q-E8JtEs
+Client Secret : c-bU98x_9kFr93LPSNPOJTKNqNWP5WcuYkYCMDeHvPI
+Jeton d'accès (Access Token) : 4_AxEF5KWVycxBtq4vd09yw3iEo2vTOTcbirkQ06-PY
+
+- création de l'image Kafka (avec docker) et création du topic 'message_kafka' pour recevoir des messages
+
+docker-compose up -d  
+
+docker exec projetfinal5spar-kafka-1 kafka-topics.sh --create --topic message_kafka --bootstrap-server localhost:9092 --partitions 1 --replication-factor 1
+
+- Installation des librairies
+
+
+
+- création du fichier mastodon_kafka_stream.py pour la connexion a l'api, … 
+python mastodon_kafka_stream.py
+
+
+
+docker exec -it projetfinal5spar-spark-1 /bin/bash
+
+spark-submit --packages org.apache.spark:spark-sql-kafka-0-10_2.12:3.1.2 mastodon_kafka_stream.py

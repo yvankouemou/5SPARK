@@ -33,7 +33,7 @@ services:
       timeout: 10s
       retries: 3
 
-  mastodon_kafka_stream:
+  mastodon_kafka_stream:          #mise en place du Dockerfile
     build:
       context: .  # Contexte de construction du conteneur
       dockerfile: Dockerfile
